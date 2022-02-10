@@ -31,6 +31,9 @@ int main() {
   free(ag);
 
   puts("Welcome to Bill's Wordle Clone!");
+  puts("I promise this is not the real Wordle");
+  puts("https://www.nytimes.com/games/wordle/index.html");
+  puts("If you want the real version, there it is");
 
   while (1) {
     char* ans;
@@ -95,6 +98,7 @@ void prompt_for_guess(char** guesses, int guess_index, char* guess_list, int gue
 
 int is_valid_guess(char* guess, char* guess_list, int guess_count) {
   // TODO these are sorted and this should be a binary search
+  // Actually these are no longer sorted, maybe fix that
   char* guess_from_list = calloc(6, sizeof(char));
   for (int i = 0; i < guess_count; i++) {
     memcpy(guess_from_list, guess_list + (i * 5), 5);
