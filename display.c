@@ -42,4 +42,6 @@ void display_board(char* answer, char** guesses, int num_guesses) {
   for (int i = num_guesses; i < MAX_GUESSES; i++) {
     display_empty_row();
   }
+
+  // TODO display keyboard with keys highlighted
 }

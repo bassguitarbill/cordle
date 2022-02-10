@@ -24,32 +24,45 @@ int main() {
   char *an;
   answers(&an, &an_length);
 
-  char* ans;
-  pick_random_answer(&ans, an, an_length);
-  //printf("Random answer is %s\n", ans);
+  puts("Welcome to Bill's Wordle Clone!");
 
-  char** guesses = calloc(MAX_GUESSES, sizeof(char*));
-  int victory = 0;
-  int i;
-  for (i = 0; i < MAX_GUESSES; i++) {
+  while (1) {
+    char* ans; // TODO free me
+    pick_random_answer(&ans, an, an_length);
+    //printf("Random answer is %s\n", ans);
+
+    char** guesses = calloc(MAX_GUESSES, sizeof(char*)); // TODO free me
+    int victory = 0;
+    int i;
+    for (i = 0; i < MAX_GUESSES; i++) {
+      display_board(ans, guesses, i);
+      prompt_for_guess(guesses, i, ag, ag_length, an, an_length);
+      if (strcmp(guesses[i], ans) == 0) {
+        i++;
+        victory = 1;
+        break;
+      }
+    }
     display_board(ans, guesses, i);
-    prompt_for_guess(guesses, i, ag, ag_length, an, an_length);
-    if (strcmp(guesses[i], ans) == 0) {
-      i++;
-      victory = 1;
+    if (victory) {
+      printf("You did it!\n");
+    } else {
+      printf("You're out of guesses!\nThe word was '%s'\n", ans);
+    }
+
+    printf("Would you like to play again? [y/n]\n");
+    char* again = malloc(1);
+    scanf("\n%c", again);
+    if ((*again) == 'n') {
+      free(again);
       break;
     }
+    free(again);
   }
-  display_board(ans, guesses, i);
-  if (victory) {
-    printf("You did it!\n");
-  } else {
-    printf("You're out of guesses!\nThe word was '%s'\n", ans);
-  }
-
   return 0;
 }
 
+// TODO fix this signature so it only takes one list of words
 void prompt_for_guess(char** guesses, int guess_index, char* guess_list, int guess_count, char* answer_list, int answer_count) {
   char* guess = malloc(6);
   while (1) {
@@ -78,7 +91,6 @@ int is_valid_guess(char* guess, char* guess_list, int guess_count, char* answer_
 }
 
 void pick_random_answer(char* *answer, char* answer_list, int answer_count) {
-  int max_rand = (RAND_MAX / answer_count) * answer_count; // all words should be equally likely
   int r = rand() % answer_count;
 
   char* a = calloc(6, sizeof(char));
