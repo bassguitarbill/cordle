@@ -9,11 +9,11 @@ void allowed_guesses(char **ag, int *ag_length) {
 }
 
 void load_word_file(char* filename, char **ls, int *ls_length) {
-  FILE* guess_file = fopen(filename, "r"); // TODO close me
+  FILE* guess_file = fopen(filename, "r");
   fseek(guess_file, 0L, SEEK_END);
   int sz = ftell(guess_file);
   int wc = (sz / 6) + 1;
-  char* words = malloc(wc * 5);  // TODO free me
+  char* words = malloc(wc * 5);
   rewind(guess_file);
 
   char* current_word = malloc(6);
@@ -23,6 +23,8 @@ void load_word_file(char* filename, char **ls, int *ls_length) {
     memcpy(wa, current_word, 5);
     count++;
   }
+
+  fclose(guess_file);
 
   free(current_word);
 

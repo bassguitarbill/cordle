@@ -27,11 +27,11 @@ int main() {
   puts("Welcome to Bill's Wordle Clone!");
 
   while (1) {
-    char* ans; // TODO free me
+    char* ans;
     pick_random_answer(&ans, an, an_length);
     //printf("Random answer is %s\n", ans);
 
-    char** guesses = calloc(MAX_GUESSES, sizeof(char*)); // TODO free me
+    char** guesses = calloc(MAX_GUESSES, sizeof(char*));
     int victory = 0;
     int i;
     for (i = 0; i < MAX_GUESSES; i++) {
@@ -43,12 +43,20 @@ int main() {
         break;
       }
     }
+
     display_board(ans, guesses, i);
     if (victory) {
       printf("You did it!\n");
     } else {
       printf("You're out of guesses!\nThe word was '%s'\n", ans);
     }
+
+    for (int x = 0; x < i; x++) {
+      free(guesses[x]);
+    }
+
+    free(guesses);
+    free(ans);
 
     printf("Would you like to play again? [y/n]\n");
     char* again = malloc(1);
@@ -59,6 +67,10 @@ int main() {
     }
     free(again);
   }
+
+  free(ag);
+  free(an);
+
   return 0;
 }
 
