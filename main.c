@@ -4,12 +4,14 @@
 #include <time.h>
 
 #include "loader.c"
+#include "display.c"
+#include "wordle.h"
+
 void pick_random_answer(char* *answer, char* answer_list, int answer_count); 
 void display_board(char* answer, char** guesses, int num_guesses);
 void prompt_for_guess(char** guesses, int guess_index, char* guess_list, int guess_count, char* answer_list, int answer_count);
 int is_valid_guess(char* guess, char* guess_list, int guess_count, char* answer_list, int answer_count);
 
-#define MAX_GUESSES 6
 int main() {
 
   srand(time(NULL));
@@ -54,7 +56,6 @@ void prompt_for_guess(char** guesses, int guess_index, char* guess_list, int gue
     puts("What's your guess?");
     scanf("%5s", guess);
     if (is_valid_guess(guess, guess_list, guess_count, answer_list, answer_count)) {
-      // printf("Ok that looks good\n");
       guesses[guess_index] = guess;
       break;
     }
@@ -83,48 +84,4 @@ void pick_random_answer(char* *answer, char* answer_list, int answer_count) {
   char* a = calloc(6, sizeof(char));
   memcpy(a, answer_list + (r * 5), 5);
   *answer = a;
-}
-
-void print_correct(char a) {
-  printf("%s%s %c ", "\e[0;30m", "\e[42m", a);
-}
-void print_in_word(char a) {
-  printf("%s%s %c ", "\e[0;30m", "\e[43m", a);
-}
-void print_incorrect(char a) {
-  printf("%s%s %c ", "\e[0;30m", "\e[47m", a);
-}
-
-int is_correct(char a, char b) {
-  return a == b;
-}
-
-int is_in_word(char a, char* word) {
-  for (int i = 0; i < 5; i ++) {
-    if (a == word[i]) return 1;
-  }
-  return 0;
-}
-
-void display_guess(char* answer, char* guess) {
-  for (int i = 0; i < 5; i ++) {
-    if (is_correct(answer[i], guess[i])) print_correct(guess[i]);
-    else if(is_in_word(guess[i], answer)) print_in_word(guess[i]);
-    else print_incorrect(guess[i]);
-  }
-  puts("\e[0m");
-}
-
-void display_empty_row() {
-  puts(" _  _  _  _  _ ");
-}
-
-void display_board(char* answer, char** guesses, int num_guesses) {
-  for (int i = 0; i < num_guesses; i++) {
-    display_guess(answer, guesses[i]);
-  }
-
-  for (int i = num_guesses; i < MAX_GUESSES; i++) {
-    display_empty_row();
-  }
 }
